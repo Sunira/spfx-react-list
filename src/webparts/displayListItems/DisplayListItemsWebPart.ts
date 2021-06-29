@@ -11,6 +11,8 @@ import {
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
 import * as strings from 'DisplayListItemsWebPartStrings';
+import MockHttpClient from './MockHttpClient';
+
 import DisplayListItems from './components/DisplayListItems';
 import { IDisplayListItemsProps } from './components/IDisplayListItemsProps';
 
@@ -90,4 +92,13 @@ export default class DisplayListItemsWebPart extends BaseClientSideWebPart<IDisp
       ]
     };
   }
+  
+  private _getMockListData(): Promise<ISPLists> {
+    return MockHttpClient.get()
+      .then((data: ISPList[]) => {
+        var listData: ISPLists = { value: data };
+        return listData;
+      }) as Promise<ISPLists>;
+  }
 }
+

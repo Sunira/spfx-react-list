@@ -10,8 +10,8 @@ export default class DisplayListItems extends React.Component<IDisplayListItemsP
         <div className={ styles.container }>
           <div className={ styles.row }>
             <div className={ styles.column }>
-              <span className={ styles.title }>Welcome to SharePoint!</span>
-              <p className={ styles.subTitle }>Customize SharePoint experiences using Web Parts.</p>
+              <span className={ styles.title }>This is a SpFx Custom Part!</span>
+              <p className={ styles.subTitle }>It's built using React!.</p>
               <p className={ styles.description }>{escape(this.props.description)}</p>
               <p className={ styles.description }>{escape(this.props.test)}</p>
               <p className={ styles.description }>{this.props.test1}</p>
