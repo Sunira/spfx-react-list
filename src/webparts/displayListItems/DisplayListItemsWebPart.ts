@@ -15,6 +15,16 @@ import MockHttpClient from './MockHttpClient';
 
 import DisplayListItems from './components/DisplayListItems';
 import { IDisplayListItemsProps } from './components/IDisplayListItemsProps';
+import styles from './components/DisplayListItems.module.scss';
+import {
+  SPHttpClient,
+  SPHttpClientResponse
+} from '@microsoft/sp-http';
+
+import {
+  Environment,
+  EnvironmentType
+} from '@microsoft/sp-core-library';
 
 export interface IDisplayListItemsWebPartProps {
   description: string;
@@ -22,6 +32,15 @@ export interface IDisplayListItemsWebPartProps {
   test1: boolean;
   test2: string;
   test3: boolean;
+}
+
+export interface ISPLists {
+  value: ISPList[];
+}
+
+export interface ISPList {
+  Title: string;
+  Id: string;
 }
 
 export default class DisplayListItemsWebPart extends BaseClientSideWebPart<IDisplayListItemsWebPartProps> {
@@ -40,6 +59,7 @@ export default class DisplayListItemsWebPart extends BaseClientSideWebPart<IDisp
     );
 
     ReactDom.render(element, this.domElement);
+    this._renderListAsync();
   }
 
   protected onDispose(): void {
@@ -100,5 +120,47 @@ export default class DisplayListItemsWebPart extends BaseClientSideWebPart<IDisp
         return listData;
       }) as Promise<ISPLists>;
   }
+
+  private _getListData(): Promise<ISPLists> {
+    return this.context.spHttpClient.get(this.context.pageContext.web.absoluteUrl + `/_api/web/lists?$filter=Hidden eq false`, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      });
+  }
+
+  private _renderList(items: ISPList[]): void {
+    let html: string = '';
+    items.forEach((item: ISPList) => {
+      html += `
+  <ul class="${styles.list}">
+    <li class="${styles.listItem}">
+      <span class="ms-font-l">${item.Title}</span>
+    </li>
+  </ul>`;
+    });
+
+    const listContainer: Element = this.domElement.querySelector('#spListContainer');
+    listContainer.innerHTML = html;
+  }
+
+  // The Environment.type property helps you check if you are in a local 
+  // or SharePoint environment.The correct method is called 
+  // depending on where your workbench is hosted.
+  private _renderListAsync(): void {
+    // Local environment
+    if (Environment.type === EnvironmentType.Local) {
+      this._getMockListData().then((response) => {
+        this._renderList(response.value);
+      });
+    }
+    else if (Environment.type == EnvironmentType.SharePoint ||
+      Environment.type == EnvironmentType.ClassicSharePoint) {
+      this._getListData()
+        .then((response) => {
+          this._renderList(response.value);
+        });
+    }
+  }
+
 }
 
