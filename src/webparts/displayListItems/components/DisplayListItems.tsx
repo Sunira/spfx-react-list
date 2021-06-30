@@ -22,8 +22,10 @@ export default class DisplayListItems extends React.Component<IDisplayListItemsP
               </a>
             </div>
           </div>
+            <div id="spListContainer" />
         </div>
       </div>
     );
   }
 }
+
