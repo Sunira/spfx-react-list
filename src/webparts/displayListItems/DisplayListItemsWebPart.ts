@@ -28,10 +28,10 @@ import {
 
 export interface IDisplayListItemsWebPartProps {
   description: string;
-  test: string;
-  test1: boolean;
+  longdesc: string;
+  showlongdesc: boolean;
   test2: string;
-  test3: boolean;
+  colorToggle: boolean;
 }
 
 export interface ISPLists {
@@ -50,10 +50,10 @@ export default class DisplayListItemsWebPart extends BaseClientSideWebPart<IDisp
       DisplayListItems,
       {
         description: this.properties.description,
-        test: this.properties.test,
-        test1: this.properties.test1,
+        longdesc: this.properties.longdesc,
+        showlongdesc: this.properties.showlongdesc,
         test2: this.properties.test2,
-        test3: this.properties.test3,
+        colorToggle: this.properties.colorToggle,
 
       }
     );
@@ -84,12 +84,17 @@ export default class DisplayListItemsWebPart extends BaseClientSideWebPart<IDisp
                 PropertyPaneTextField('description', {
                   label: 'Description'
                 }),
-                PropertyPaneTextField('test', {
+                PropertyPaneTextField('longdesc', {
                   label: 'Multi-line Text Field',
                   multiline: true
                 }),
-                PropertyPaneCheckbox('test1', {
-                  text: 'Checkbox'
+                PropertyPaneCheckbox('showlongdesc', {
+                  text: 'Show Long Description?'
+                }),
+                PropertyPaneToggle('colorToggle', {
+                  label: 'Toggle',
+                  onText: 'Blue',
+                  offText: 'Red'
                 }),
                 PropertyPaneDropdown('test2', {
                   label: 'Dropdown',
@@ -99,11 +104,6 @@ export default class DisplayListItemsWebPart extends BaseClientSideWebPart<IDisp
                     { key: '3', text: 'Three' },
                     { key: '4', text: 'Four' }
                   ]
-                }),
-                PropertyPaneToggle('test3', {
-                  label: 'Toggle',
-                  onText: 'On',
-                  offText: 'Off'
                 })
               ]
             }
@@ -112,7 +112,7 @@ export default class DisplayListItemsWebPart extends BaseClientSideWebPart<IDisp
       ]
     };
   }
-  
+
   private _getMockListData(): Promise<ISPLists> {
     return MockHttpClient.get()
       .then((data: ISPList[]) => {
@@ -122,7 +122,8 @@ export default class DisplayListItemsWebPart extends BaseClientSideWebPart<IDisp
   }
 
   private _getListData(): Promise<ISPLists> {
-    return this.context.spHttpClient.get(this.context.pageContext.web.absoluteUrl + `/_api/web/lists?$filter=Hidden eq false`, SPHttpClient.configurations.v1)
+    return this.context.spHttpClient.get(this.context.pageContext.web.absoluteUrl 
+      + `/_api/web/lists?$filter=Hidden eq false`, SPHttpClient.configurations.v1)
       .then((response: SPHttpClientResponse) => {
         return response.json();
       });
@@ -132,11 +133,11 @@ export default class DisplayListItemsWebPart extends BaseClientSideWebPart<IDisp
     let html: string = '';
     items.forEach((item: ISPList) => {
       html += `
-  <ul class="${styles.list}">
-    <li class="${styles.listItem}">
-      <span class="ms-font-l">${item.Title}</span>
-    </li>
-  </ul>`;
+        <ul class="${styles.list}">
+          <li class="${styles.listItem}">
+            <span class="ms-font-l">${item.Title}</span>
+          </li>
+        </ul>`;
     });
 
     const listContainer: Element = this.domElement.querySelector('#spListContainer');

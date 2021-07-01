@@ -1,7 +1,7 @@
 export interface IDisplayListItemsProps {
   description: string;
-  test: string;
-  test1: boolean;
+  longdesc: string;
+  showlongdesc: boolean;
   test2: string;
-  test3: boolean;
+  colorToggle: boolean;
 }

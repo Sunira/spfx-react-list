@@ -7,10 +7,17 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
   }
 
-  .row {
+  .row-red {
     @include ms-Grid-row;
     @include ms-fontColor-white;
-    background-color: $ms-color-themeDark;
+    background-color: rgb(167, 4, 4);
+    padding: 20px;
+  }
+
+  .row-blue {
+    @include ms-Grid-row;
+    @include ms-fontColor-white;
+    background-color: rgb(14, 7, 110);
     padding: 20px;
   }
 
@@ -72,7 +79,7 @@
       display: inline-block;
     }
   }
-  
+
   .list {
     color: #333333;
     font-family: "Segoe UI Regular WestEuropean", "Segoe UI", Tahoma, Arial,
@@ -102,4 +109,6 @@
     padding: 9px 28px 3px;
     position: relative;
   }
+
+  
 }
