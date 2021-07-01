@@ -9,14 +9,14 @@ export default class DisplayListItems extends React.Component<IDisplayListItemsP
     let showlongdesc = <span></span>;
 
     if (this.props.showlongdesc){
-      showlongdesc = <p className={ styles.description }>{escape(this.props.longdesc)}</p>
+      showlongdesc = <p className={ styles.description }>{escape(this.props.longdesc)}</p>;
     }
 
     let styleString = "";
     if (this.props.colorToggle){
-      styleString = styles['row-blue'];
+      styleString = styles['rowBlue'];
     } else {
-      styleString = styles['row-red'];
+      styleString = styles['rowRed'];
     }
 
 
